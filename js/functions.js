@@ -3,14 +3,13 @@ function checksLengthString(checkString, maxLength) {
     return true;
   } return false;
 }
-// console.log(checksLengthString('проверяемая строка', 20));
-// console.log(checksLengthString('проверяемая строка', 10));
-// console.log(checksLengthString('проверяемая строка', 5));
+checksLengthString('проверяемая строка', 20);
+checksLengthString('проверяемая строка', 10);
+checksLengthString('проверяемая строка', 5);
 
 
 function checksPalindrome(string) {
-  string = string.replaceAll(' ', '').toUpperCase();
-  const normalaseString = string;
+  const normalaseString = string.replaceAll(' ', '').toUpperCase();
   let newString = '';
   for (let i = normalaseString.length - 1; i >= 0; i--) {
     newString += normalaseString[i];
@@ -19,8 +18,8 @@ function checksPalindrome(string) {
     return true;
   } return false;
 }
-// console.log(checksPalindrome('Лёша на полке клопа нашёл '));
-// console.log(checksPalindrome('дерево '));
+checksPalindrome('Лёша на полке клопа нашёл ');
+checksPalindrome('дерево ');
 
 
 function extractsDigits(string) {
@@ -34,4 +33,4 @@ function extractsDigits(string) {
   }
   return (parseInt(newString, 10));
 }
-// console.log(extractsDigits('-jhjh001.6'));
+extractsDigits('-jhjh001.6');

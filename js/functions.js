@@ -29,3 +29,19 @@ function extractsDigits(string) {
   return (parseInt(newString, 10));
 }
 extractsDigits('-jhjh001.6');
+
+// eslint-disable-next-line no-return-assign
+const getNumber = (string) => Number(string.replace(':', '.'));
+
+const getWorkTime = (startDay, endDay, startMeet, timeMeet) => {
+  // Переводим минуты в часы
+  const newTime = timeMeet / 60;
+  const durationMeet = getNumber(startMeet) + newTime;
+  return (durationMeet <= getNumber(endDay) && durationMeet >= getNumber(startDay));
+};
+
+console.log(getWorkTime('08:00', '17:30', '14:00', 90)); // true
+console.log(getWorkTime('8:0', '10:0', '8:0', 120)); // true
+console.log(getWorkTime('08:00', '14:30', '14:00', 90));// false
+console.log(getWorkTime('14:00', '17:30', '08:0', 90)); // false
+console.log(getWorkTime('8:00', '17:30', '08:00', 900)); // false

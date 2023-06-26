@@ -88,5 +88,5 @@ const createDescription = () => ({
   comments: Array.from({ length: getRandomInteger(0, 30) }, createComment),
 });
 
-const someCreateDescription = Array.from({ length: COUNT }, createDescription);
-export{someCreateDescription};
+const someCreateDescription = () => Array.from({ length: COUNT }, createDescription);
+export { someCreateDescription };

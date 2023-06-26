@@ -1,2 +1,3 @@
-import { someCreateDescription } from './data.js';
-console.log(someCreateDescription);
+// import { someCreateDescription } from './data.js';
+// console.log(someCreateDescription);
+import './picture.js';

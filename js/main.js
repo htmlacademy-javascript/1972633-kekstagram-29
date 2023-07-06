@@ -1,5 +1,6 @@
 import { picturesListFragment } from './picture.js';
+import { onPictureOpen } from './picture-modal.js';
 
 const picturesList = document.querySelector('.pictures');
 picturesList.append(picturesListFragment);
-import './picture-modal.js';
+document.addEventListener('click', onPictureOpen);

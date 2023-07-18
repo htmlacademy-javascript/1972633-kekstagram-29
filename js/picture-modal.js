@@ -1,13 +1,12 @@
 import { isEscapeKey } from './util.js';
 import { picturesArray } from './picture.js';
 const COMMENTS_AMOUNT = 5;
-
 const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
 const userImg = bigPicture.querySelector('.big-picture__img img');
 const userCommentsCount = bigPicture.querySelector('.comments-count');
 const socialCaption = bigPicture.querySelector('.social__caption');
-const likeCount = bigPicture.querySelector('.likes-count');
+const likeCount = document.querySelector('.likes-count');
 
 const socialCommentCount = bigPicture.querySelector('.social__comment-count');
 const socialComments = bigPicture.querySelector('.social__comments');
@@ -91,6 +90,7 @@ const onPictureOpen = (evt) => {
       if (data.id === numberId) {
         openModal(picturesArray[index]);
       }
+      evt.preventDefault();
     });
   }
 };

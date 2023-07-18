@@ -1,6 +1,7 @@
 import { isEscapeKey } from './util.js';
 import { body } from './picture-modal.js';
-
+import { onScaleClick } from './scale.js';
+import { createSlider, onEffectsChange, setSliderUpdates } from './filters.js';
 
 const MAX_COMMENTS_LENGTH = 140;
 const MAX_HASHTAGS_LENGTH = 5;
@@ -13,8 +14,12 @@ const ERORHASHTAGS = {
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
+const uploadScale = document.querySelector('.img-upload__scale ');
+const slider = uploadForm.querySelector('.effect-level__slider');
+const effects = uploadForm.querySelector('.effects__list');
 const sliderContainer = uploadForm.querySelector('.img-upload__effect-level');
 const imagePreview = uploadForm.querySelector('.img-upload__preview img');
+const effectLevel = uploadForm.querySelector('.effect-level__value');
 
 
 const textHashtags = uploadForm.querySelector('.text__hashtags');
@@ -89,11 +94,14 @@ const onOverlayClick = (evt) => {
 function closeUploadOverlay() {
   uploadForm.reset();
   pristine.reset();
+  slider.noUiSlider.destroy();
   body.classList.remove('modal-open');
   uploadOverlay.classList.add('hidden');
   document.removeEventListener('keydown', onDocumentKeydown);
   uploadForm.removeEventListener('click', onOverlayClick);
   uploadForm.removeEventListener('submit', validatePristine);
+  uploadScale.removeEventListener('click', onScaleClick);
+  effects.removeEventListener('change', onEffectsChange);
 }
 
 const onOpenReset = () => {
@@ -104,10 +112,16 @@ const onOpenReset = () => {
 const openUploadOverlay = () => {
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
+  createSlider(slider);
+  setSliderUpdates();
   onOpenReset();
   uploadForm.addEventListener('click', onOverlayClick);
   uploadForm.addEventListener('submit', validatePristine);
+  uploadScale.addEventListener('click', onScaleClick);
   document.addEventListener('keydown', onDocumentKeydown);
+  effects.addEventListener('change', onEffectsChange);
 };
 
 export { openUploadOverlay };
+export { uploadScale };
+export { sliderContainer, slider, imagePreview, effectLevel };

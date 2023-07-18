@@ -111,3 +111,4 @@ function onPictureClose(evt) {
 }
 
 export { onPictureOpen };
+export { body };

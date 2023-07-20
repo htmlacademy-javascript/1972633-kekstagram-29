@@ -3,6 +3,17 @@ import { body } from './picture-modal.js';
 import { onScaleClick } from './scale.js';
 import { createSlider, onEffectsChange, setSliderUpdates } from './filters.js';
 
+
+import { postData } from './api.js';
+import { showSuccessPopup, showErrorPopup} from './submit-popup.js';
+const submitButton = document.querySelector('.img-upload__submit');
+const SubmitButtonText = {
+  DEFAULT: 'Опубликовать',
+  SENDING: 'Публикую...'
+};
+
+
+
 const MAX_COMMENTS_LENGTH = 140;
 const MAX_HASHTAGS_LENGTH = 5;
 const REGEX = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -64,14 +75,45 @@ pristine.addValidator(
   textHashtags, nonrepeatingHashtag, ERORHASHTAGS.nonrepeatingHashtag
 );
 
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.DEFAULT;
+};
+
+
+
+
+
 const validatePristine = (evt) => {
+  evt.preventDefault();
   const isValid = pristine.validate();
-  if (!isValid) {
-    evt.preventDefault();
-    console.log('Нельзя отправлять');
-  } else {
-    console.log('Можно отправлять');
+  if (isValid) {
+    blockSubmitButton();
+    postData(new FormData(evt.target))
+      .then(() => {
+        closeUploadOverlay();
+        showSuccessPopup();
+      })
+      .catch(
+        (error) => {
+          showErrorPopup(error.message);
+        }
+      )
+      .finally(unblockSubmitButton);
   }
+  // const isValid = pristine.validate();
+  // if (!isValid) {
+  //   evt.preventDefault();
+  //   console.log('Нельзя отправлять');
+  // } else {
+  //   console.log('Можно отправлять');
+  // }
 };
 
 

@@ -1,9 +1,5 @@
 import { isEscapeKey } from './util.js';
 
-
-import { getData } from './api.js';
-import { showAlert } from './util.js';
-// import { picturesArray } from './picture.js';
 const COMMENTS_AMOUNT = 5;
 const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
@@ -65,7 +61,6 @@ const onCommentsLoaderClick = () => {
   createPictureComments(addedComments);
   socialCommentCount.textContent =
     `${socialComments.children.length} из ${commentsShowArray.length} комментариев`;
-
   if (commentsShowArray.length <= socialComments.children.length) {
     commentsLoader.classList.add('hidden');
   }
@@ -86,34 +81,6 @@ const openModal = (picture) => {
   commentsLoader.addEventListener('click', onCommentsLoaderClick);
 };
 
-const onPictureOpen = (evt) => {
-  const element = evt.target.closest('.picture');
-  if (element) {
-    const numberId = Number(element.dataset.id);
-    getData()
-      .then((data) => {
-        data.forEach((dat, index) => {
-          if (dat.id === numberId) {
-            openModal(data[index]);
-          }
-          evt.preventDefault();
-        });
-      }).catch((error) => {
-        showAlert(error.message);
-      });
-  }
-  // const element = evt.target.closest('.picture');
-  // if (element) {
-  //   const numberId = Number(element.dataset.id);
-  //   picturesArray.forEach((data, index) => {
-  //     if (data.id === numberId) {
-  //       openModal(picturesArray[index]);
-  //     }
-  //     evt.preventDefault();
-  //   });
-  // }
-};
-
 function closeUserModal() {
   body.classList.remove('modal-open');
   bigPicture.classList.add('hidden');
@@ -129,5 +96,4 @@ function onPictureClose(evt) {
   }
 }
 
-export { onPictureOpen };
-export { body };
+export { openModal };

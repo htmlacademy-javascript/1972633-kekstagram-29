@@ -1,10 +1,3 @@
-// import { someCreateDescription } from './data.js';
-
-import { getData } from './api.js';
-import { showAlert } from './util.js';
-
-
-// const picturesArray = someCreateDescription();
 const pictureTemplate = document.querySelector('#picture').content;
 const picturesListFragment = document.createDocumentFragment();
 
@@ -23,24 +16,12 @@ const createItem = (item) =>{
   return pictureItem;
 };
 
-// picturesArray.forEach((picture) => {
-//   picturesListFragment.append(createItem(picture));
-// });
-
-// export { picturesListFragment };
-// export { picturesArray };
-const renderPictures = () => {
-  getData()
-    .then((data) => {
-      data.forEach((picture) => {
-        picturesListFragment.append(createItem(picture));
-      });
-      const picturesList = document.querySelector('.pictures');
-      picturesList.append(picturesListFragment);
-    }).catch((error) => {
-      showAlert(error.message);
-    });
+const renderPictures = (data) => {
+  data.forEach((picture) => {
+    picturesListFragment.append(createItem(picture));
+  });
+  const picturesList = document.querySelector('.pictures');
+  picturesList.append(picturesListFragment);
 };
 
-export { picturesListFragment };
 export { renderPictures };

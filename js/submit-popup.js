@@ -1,7 +1,6 @@
 import { isEscapeKey } from './util.js';
-import { body } from './picture-modal.js';
 
-const successPopup = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+const body = document.querySelector('body');const successPopup = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
 const errorPopup = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
 
 const onSuccessPopupKeydown = (evt) => {

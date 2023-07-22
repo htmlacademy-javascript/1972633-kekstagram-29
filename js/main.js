@@ -1,18 +1,18 @@
-// import { picturesListFragment } from './picture.js';
-import { onPictureOpen } from './picture-modal.js';
 import { openUploadOverlay } from './form.js';
+import { showAlert } from './util.js';
+import { getData } from './api.js';
+import { getGallery } from './gallery.js';
 
-
-import { renderPictures } from './picture.js';
-
-
-// const picturesList = document.querySelector('.pictures');
 const uploadInput = document.querySelector('.img-upload__input');
 
+try {
+  const data = await getData();
+  getGallery(data);
+  // const debouncedRenderGallery = debounce(renderGallery);
+  // showSort(data, debouncedRenderGallery);
+  // getGallery(sortImages());
+} catch (err) {
+  showAlert(err.message);
+}
 
-renderPictures();
-
-
-// picturesList.append(picturesListFragment);
-document.addEventListener('click', onPictureOpen);
 uploadInput.addEventListener('change', openUploadOverlay);

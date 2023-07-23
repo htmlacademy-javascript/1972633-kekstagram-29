@@ -1,8 +1,7 @@
 import { isEscapeKey } from './util.js';
 import { onScaleClick } from './scale.js';
 import { createSlider, onEffectsChange, setSliderUpdates } from './filters.js';
-// import { sendData } from './api.js';
-// import { showSuccessPopup, showErrorPopup} from './submit-popup.js';
+import { fileChooser } from './avatar.js';
 
 const MAX_COMMENTS_LENGTH = 140;
 const MAX_HASHTAGS_LENGTH = 5;
@@ -124,6 +123,7 @@ const onOpenReset = () => {
 };
 
 const openUploadOverlay = () => {
+  fileChooser();
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
   createSlider(slider);

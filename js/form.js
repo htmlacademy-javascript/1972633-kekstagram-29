@@ -90,25 +90,6 @@ const getSendForm = (cb) => {
   });
 };
 
-// const onvalidatePristine = (evt) => {
-//   evt.preventDefault();
-//   const isValid = pristine.validate();
-//   if (isValid) {
-//     blockSubmitButton();
-//     sendData(new FormData(evt.target))
-//       .then(() => {
-//         closeUploadOverlay();
-//         showSuccessPopup();
-//       })
-//       .catch(
-//         (error) => {
-//           showErrorPopup(error.message);
-//         }
-//       )
-//       .finally(unblockSubmitButton);
-//   }
-// };
-
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -133,7 +114,6 @@ function closeUploadOverlay() {
   uploadOverlay.classList.add('hidden');
   document.removeEventListener('keydown', onDocumentKeydown);
   uploadForm.removeEventListener('click', onOverlayClick);
-  // uploadForm.removeEventListener('submit', onvalidatePristine);
   uploadScale.removeEventListener('click', onScaleClick);
   effects.removeEventListener('change', onEffectsChange);
 }
@@ -150,7 +130,6 @@ const openUploadOverlay = () => {
   setSliderUpdates();
   onOpenReset();
   uploadForm.addEventListener('click', onOverlayClick);
-  // uploadForm.addEventListener('submit', onvalidatePristine);
   uploadScale.addEventListener('click', onScaleClick);
   document.addEventListener('keydown', onDocumentKeydown);
   effects.addEventListener('change', onEffectsChange);

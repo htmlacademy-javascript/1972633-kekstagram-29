@@ -1,7 +1,8 @@
 import { isEscapeKey } from './util.js';
-import { body } from './picture-modal.js';
 import { onScaleClick } from './scale.js';
 import { createSlider, onEffectsChange, setSliderUpdates } from './filters.js';
+// import { sendData } from './api.js';
+// import { showSuccessPopup, showErrorPopup} from './submit-popup.js';
 
 const MAX_COMMENTS_LENGTH = 140;
 const MAX_HASHTAGS_LENGTH = 5;
@@ -12,6 +13,7 @@ const ERORHASHTAGS = {
   nonrepeatingHashtag: 'Хэш-теги повторяются'
 };
 
+const body = document.querySelector('body');
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const uploadScale = document.querySelector('.img-upload__scale ');
@@ -21,10 +23,14 @@ const sliderContainer = uploadForm.querySelector('.img-upload__effect-level');
 const imagePreview = uploadForm.querySelector('.img-upload__preview img');
 const effectLevel = uploadForm.querySelector('.effect-level__value');
 
-
 const textHashtags = uploadForm.querySelector('.text__hashtags');
 const textDescripton = uploadForm.querySelector('.text__description');
 
+const submitButton = document.querySelector('.img-upload__submit');
+const SubmitButtonText = {
+  DEFAULT: 'Опубликовать',
+  SENDING: 'Публикую...'
+};
 
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -35,7 +41,6 @@ const pristine = new Pristine(uploadForm, {
 const validateDescripton = (value) => value.trim().length <= MAX_COMMENTS_LENGTH;
 const descriptonError = () => `Длина комментария не больше ${MAX_COMMENTS_LENGTH} символов`;
 
-
 pristine.addValidator(
   textDescripton, validateDescripton, descriptonError
 );
@@ -43,14 +48,12 @@ pristine.addValidator(
 const normalaseHashtags = (string) =>
   string.trim().toLowerCase().split(' ').filter((str) => str !== '');
 
-
 const validCount = (value) =>
   normalaseHashtags(value).length <= MAX_HASHTAGS_LENGTH;
 
 const validHashtag = (value) => normalaseHashtags(value).every((hashtag) => REGEX.test(hashtag));
 
 const nonrepeatingHashtag = (value) => normalaseHashtags(value).length === new Set(normalaseHashtags(value)).size;
-
 
 pristine.addValidator(
   textHashtags, validCount, ERORHASHTAGS.validCount
@@ -64,16 +67,47 @@ pristine.addValidator(
   textHashtags, nonrepeatingHashtag, ERORHASHTAGS.nonrepeatingHashtag
 );
 
-const validatePristine = (evt) => {
-  const isValid = pristine.validate();
-  if (!isValid) {
-    evt.preventDefault();
-    console.log('Нельзя отправлять');
-  } else {
-    console.log('Можно отправлять');
-  }
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
 };
 
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.DEFAULT;
+};
+
+const getSendForm = (cb) => {
+  uploadForm.addEventListener('submit', async (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      const formData = new FormData(evt.target);
+      await cb(formData);
+      unblockSubmitButton();
+    }
+  });
+};
+
+// const onvalidatePristine = (evt) => {
+//   evt.preventDefault();
+//   const isValid = pristine.validate();
+//   if (isValid) {
+//     blockSubmitButton();
+//     sendData(new FormData(evt.target))
+//       .then(() => {
+//         closeUploadOverlay();
+//         showSuccessPopup();
+//       })
+//       .catch(
+//         (error) => {
+//           showErrorPopup(error.message);
+//         }
+//       )
+//       .finally(unblockSubmitButton);
+//   }
+// };
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -99,7 +133,7 @@ function closeUploadOverlay() {
   uploadOverlay.classList.add('hidden');
   document.removeEventListener('keydown', onDocumentKeydown);
   uploadForm.removeEventListener('click', onOverlayClick);
-  uploadForm.removeEventListener('submit', validatePristine);
+  // uploadForm.removeEventListener('submit', onvalidatePristine);
   uploadScale.removeEventListener('click', onScaleClick);
   effects.removeEventListener('change', onEffectsChange);
 }
@@ -116,12 +150,10 @@ const openUploadOverlay = () => {
   setSliderUpdates();
   onOpenReset();
   uploadForm.addEventListener('click', onOverlayClick);
-  uploadForm.addEventListener('submit', validatePristine);
+  // uploadForm.addEventListener('submit', onvalidatePristine);
   uploadScale.addEventListener('click', onScaleClick);
   document.addEventListener('keydown', onDocumentKeydown);
   effects.addEventListener('change', onEffectsChange);
 };
 
-export { openUploadOverlay };
-export { uploadScale };
-export { sliderContainer, slider, imagePreview, effectLevel };
+export { openUploadOverlay, closeUploadOverlay, uploadScale, sliderContainer, slider, imagePreview, effectLevel, getSendForm, onDocumentKeydown };

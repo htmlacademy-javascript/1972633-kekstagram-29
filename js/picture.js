@@ -1,6 +1,3 @@
-import { someCreateDescription } from './data.js';
-
-const picturesArray = someCreateDescription();
 const pictureTemplate = document.querySelector('#picture').content;
 const picturesListFragment = document.createDocumentFragment();
 
@@ -19,9 +16,12 @@ const createItem = (item) =>{
   return pictureItem;
 };
 
-picturesArray.forEach((picture) => {
-  picturesListFragment.append(createItem(picture));
-});
+const renderPictures = (data) => {
+  data.forEach((picture) => {
+    picturesListFragment.append(createItem(picture));
+  });
+  const picturesList = document.querySelector('.pictures');
+  picturesList.append(picturesListFragment);
+};
 
-export { picturesListFragment };
-export { picturesArray };
+export { renderPictures };

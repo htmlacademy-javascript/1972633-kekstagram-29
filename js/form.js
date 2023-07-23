@@ -1,8 +1,8 @@
 import { isEscapeKey } from './util.js';
 import { onScaleClick } from './scale.js';
 import { createSlider, onEffectsChange, setSliderUpdates } from './filters.js';
-import { sendData } from './api.js';
-import { showSuccessPopup, showErrorPopup} from './submit-popup.js';
+// import { sendData } from './api.js';
+// import { showSuccessPopup, showErrorPopup} from './submit-popup.js';
 
 const MAX_COMMENTS_LENGTH = 140;
 const MAX_HASHTAGS_LENGTH = 5;
@@ -77,24 +77,37 @@ const unblockSubmitButton = () => {
   submitButton.textContent = SubmitButtonText.DEFAULT;
 };
 
-const onvalidatePristine = (evt) => {
-  evt.preventDefault();
-  const isValid = pristine.validate();
-  if (isValid) {
-    blockSubmitButton();
-    sendData(new FormData(evt.target))
-      .then(() => {
-        closeUploadOverlay();
-        showSuccessPopup();
-      })
-      .catch(
-        (error) => {
-          showErrorPopup(error.message);
-        }
-      )
-      .finally(unblockSubmitButton);
-  }
+const getSendForm = (cb) => {
+  uploadForm.addEventListener('submit', async (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      const formData = new FormData(evt.target);
+      await cb(formData);
+      unblockSubmitButton();
+    }
+  });
 };
+
+// const onvalidatePristine = (evt) => {
+//   evt.preventDefault();
+//   const isValid = pristine.validate();
+//   if (isValid) {
+//     blockSubmitButton();
+//     sendData(new FormData(evt.target))
+//       .then(() => {
+//         closeUploadOverlay();
+//         showSuccessPopup();
+//       })
+//       .catch(
+//         (error) => {
+//           showErrorPopup(error.message);
+//         }
+//       )
+//       .finally(unblockSubmitButton);
+//   }
+// };
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -120,7 +133,7 @@ function closeUploadOverlay() {
   uploadOverlay.classList.add('hidden');
   document.removeEventListener('keydown', onDocumentKeydown);
   uploadForm.removeEventListener('click', onOverlayClick);
-  uploadForm.removeEventListener('submit', onvalidatePristine);
+  // uploadForm.removeEventListener('submit', onvalidatePristine);
   uploadScale.removeEventListener('click', onScaleClick);
   effects.removeEventListener('change', onEffectsChange);
 }
@@ -137,10 +150,10 @@ const openUploadOverlay = () => {
   setSliderUpdates();
   onOpenReset();
   uploadForm.addEventListener('click', onOverlayClick);
-  uploadForm.addEventListener('submit', onvalidatePristine);
+  // uploadForm.addEventListener('submit', onvalidatePristine);
   uploadScale.addEventListener('click', onScaleClick);
   document.addEventListener('keydown', onDocumentKeydown);
   effects.addEventListener('change', onEffectsChange);
 };
 
-export { openUploadOverlay, uploadScale, sliderContainer, slider, imagePreview, effectLevel };
+export { openUploadOverlay, closeUploadOverlay, uploadScale, sliderContainer, slider, imagePreview, effectLevel, getSendForm, onDocumentKeydown };

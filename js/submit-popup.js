@@ -1,4 +1,5 @@
 import { isEscapeKey } from './util.js';
+import { onDocumentKeydown } from './form.js';
 
 const body = document.querySelector('body');const successPopup = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
 const errorPopup = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
@@ -36,6 +37,7 @@ function onSuccessButtonOverlayClick(evt) {
 }
 
 const showErrorPopup = () => {
+  document.removeEventListener('keydown', onDocumentKeydown);
   body.append(errorPopup);
   document.addEventListener('keydown', onErrorPopupKeydown);
   document.addEventListener('click', onErrorPopupButtonOverlayClick);
@@ -45,6 +47,7 @@ function closeErrorPopup() {
   errorPopup.remove();
   document.removeEventListener('keydown', onErrorPopupKeydown);
   document.removeEventListener('click', onErrorPopupButtonOverlayClick);
+  document.addEventListener('keydown', onDocumentKeydown);
 }
 
 function onErrorPopupButtonOverlayClick(evt) {

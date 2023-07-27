@@ -1,5 +1,6 @@
-const body = document.querySelector('body');
 const ALERT_TIME = 2000;
+
+const body = document.querySelector('body');
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 

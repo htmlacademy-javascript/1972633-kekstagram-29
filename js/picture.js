@@ -1,6 +1,6 @@
 const pictureTemplate = document.querySelector('#picture').content;
 const picturesListFragment = document.createDocumentFragment();
-const container = document.querySelector('.pictures');
+// const container = document.querySelector('.pictures');
 
 const createItem = (item) =>{
   const pictureItemTemplate = pictureTemplate.querySelector('.picture');
@@ -18,7 +18,7 @@ const createItem = (item) =>{
 };
 
 const renderPictures = (data) => {
-  container.querySelectorAll('.picture').forEach((element) => element.remove());
+  // container.querySelectorAll('.picture').forEach((element) => element.remove());
   data.forEach((picture) => {
     picturesListFragment.append(createItem(picture));
   });

@@ -1,11 +1,10 @@
+const QUANTITY_IMAGES = 10;
+
 const Sorts = {
   DEFAULT: 'filter-default',
   RANDOM: 'filter-random',
   DISCUSSED: 'filter-discussed'
 };
-
-/** Количество случайных изображений */
-const QUANTITY_IMAGES = 10;
 
 const filterImg = document.querySelector('.img-filters');
 let currentFilter = Sorts.DEFAULT;
@@ -13,14 +12,14 @@ let pictures = [];
 
 const randomSort = () => Math.random() - 0.5;
 
-const discussedSort = (pictureA, pictureB) => pictureB.comments.length - pictureA.comments.length;
+const discussSort = (pictureA, pictureB) => pictureB.comments.length - pictureA.comments.length;
 
 const sortImages = () => {
   switch (currentFilter) {
     case Sorts.RANDOM:
       return [...pictures].sort(randomSort).slice(0, QUANTITY_IMAGES);
     case Sorts.DISCUSSED:
-      return [...pictures].sort(discussedSort);
+      return [...pictures].sort(discussSort);
     default:
       return [...pictures];
   }

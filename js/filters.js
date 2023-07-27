@@ -1,4 +1,4 @@
-import { sliderContainer, slider, imagePreview, effectLevel } from './form.js';
+import { sliderContainer, slider } from './form.js';
 
 const FILTERS = {
   'none': {
@@ -43,6 +43,10 @@ const FILTERS = {
   }
 };
 
+const uploadForm = document.querySelector('.img-upload__form');
+const imagePreview = uploadForm.querySelector('.img-upload__preview img');
+const effectLevel = uploadForm.querySelector('.effect-level__value');
+
 const createSlider = (element) => {
   noUiSlider.create(element, {
     range: {
@@ -67,7 +71,7 @@ const createSlider = (element) => {
 
 let currentEffects = 'none';
 
-const updateSlider = (filter) => {
+const updatedSlider = (filter) => {
   slider.noUiSlider.updateOptions({
     range: {
       min: filter.min,
@@ -82,11 +86,11 @@ const onEffectsChange = (evt) => {
   currentEffects = evt.target.value;
   if (evt.target.value === 'none') {
     sliderContainer.classList.add('hidden');
-    updateSlider(FILTERS[currentEffects]);
+    updatedSlider(FILTERS[currentEffects]);
     return;
   }
   sliderContainer.classList.remove('hidden');
-  updateSlider(FILTERS[currentEffects]);
+  updatedSlider(FILTERS[currentEffects]);
 };
 
 const setSliderUpdates = () => {

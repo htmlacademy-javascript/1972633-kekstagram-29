@@ -1,15 +1,15 @@
 import { isEscapeKey } from './util.js';
-import { onScaleClick } from './scale.js';
+import { onScaleClick, resetScale } from './scale.js';
 import { createSlider, onEffectsChange, setSliderUpdates } from './filters.js';
-import { fileChooser } from './avatar.js';
+import { selectedFile } from './avatar.js';
 
 const MAX_COMMENTS_LENGTH = 140;
 const MAX_HASHTAGS_LENGTH = 5;
 const REGEX = /^#[a-zа-яё0-9]{1,19}$/i;
 const ERORHASHTAGS = {
-  validCount: 'Превышено количество хэш-тегов',
-  validHashtag: 'Введён невалидный хэш-тег',
-  nonrepeatingHashtag: 'Хэш-теги повторяются'
+  VALIDCOUNT: 'Превышено количество хэш-тегов',
+  VALIDHASHTAG: 'Введён невалидный хэш-тег',
+  NONREPEATINGHASHTAG: 'Хэш-теги повторяются'
 };
 
 const body = document.querySelector('body');
@@ -20,7 +20,8 @@ const slider = uploadForm.querySelector('.effect-level__slider');
 const effects = uploadForm.querySelector('.effects__list');
 const sliderContainer = uploadForm.querySelector('.img-upload__effect-level');
 const imagePreview = uploadForm.querySelector('.img-upload__preview img');
-const effectLevel = uploadForm.querySelector('.effect-level__value');
+// const effectLevel = uploadForm.querySelector('.effect-level__value');
+const uploadImg = document.querySelector('.img-upload__preview img');
 
 const textHashtags = uploadForm.querySelector('.text__hashtags');
 const textDescripton = uploadForm.querySelector('.text__description');
@@ -37,33 +38,33 @@ const pristine = new Pristine(uploadForm, {
   errorTextClass: 'img-upload__error'
 });
 
-const validateDescripton = (value) => value.trim().length <= MAX_COMMENTS_LENGTH;
+const hasValidDescripton = (value) => value.trim().length <= MAX_COMMENTS_LENGTH;
 const descriptonError = () => `Длина комментария не больше ${MAX_COMMENTS_LENGTH} символов`;
 
 pristine.addValidator(
-  textDescripton, validateDescripton, descriptonError
+  textDescripton, hasValidDescripton, descriptonError
 );
 
-const normalaseHashtags = (string) =>
+const normaliseHashtags = (string) =>
   string.trim().toLowerCase().split(' ').filter((str) => str !== '');
 
-const validCount = (value) =>
-  normalaseHashtags(value).length <= MAX_HASHTAGS_LENGTH;
+const hasValidCount = (value) =>
+  normaliseHashtags(value).length <= MAX_HASHTAGS_LENGTH;
 
-const validHashtag = (value) => normalaseHashtags(value).every((hashtag) => REGEX.test(hashtag));
+const hasValidHashtag = (value) => normaliseHashtags(value).every((hashtag) => REGEX.test(hashtag));
 
-const nonrepeatingHashtag = (value) => normalaseHashtags(value).length === new Set(normalaseHashtags(value)).size;
+const hasNonrepeatingHashtag = (value) => normaliseHashtags(value).length === new Set(normaliseHashtags(value)).size;
 
 pristine.addValidator(
-  textHashtags, validCount, ERORHASHTAGS.validCount
+  textHashtags, hasValidCount, ERORHASHTAGS.VALIDCOUNT
 );
 
 pristine.addValidator(
-  textHashtags, validHashtag, ERORHASHTAGS.validHashtag
+  textHashtags, hasValidHashtag, ERORHASHTAGS.VALIDHASHTAG
 );
 
 pristine.addValidator(
-  textHashtags, nonrepeatingHashtag, ERORHASHTAGS.nonrepeatingHashtag
+  textHashtags, hasNonrepeatingHashtag, ERORHASHTAGS.NONREPEATINGHASHTAG
 );
 
 const blockSubmitButton = () => {
@@ -108,6 +109,7 @@ const onOverlayClick = (evt) => {
 function closeUploadOverlay() {
   uploadForm.reset();
   pristine.reset();
+  resetScale();
   slider.noUiSlider.destroy();
   body.classList.remove('modal-open');
   uploadOverlay.classList.add('hidden');
@@ -123,7 +125,8 @@ const onOpenReset = () => {
 };
 
 const openUploadOverlay = () => {
-  fileChooser();
+  uploadImg.style.transform = 'scale(1)';
+  selectedFile();
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
   createSlider(slider);
@@ -135,4 +138,4 @@ const openUploadOverlay = () => {
   effects.addEventListener('change', onEffectsChange);
 };
 
-export { openUploadOverlay, closeUploadOverlay, uploadScale, sliderContainer, slider, imagePreview, effectLevel, getSendForm, onDocumentKeydown };
+export { openUploadOverlay, closeUploadOverlay, uploadScale, sliderContainer, slider, getSendForm, onDocumentKeydown };

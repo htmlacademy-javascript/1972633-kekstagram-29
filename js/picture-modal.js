@@ -5,14 +5,15 @@ const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
 const userImg = bigPicture.querySelector('.big-picture__img img');
 const userCommentsCount = bigPicture.querySelector('.comments-count');
+const userShowCommentsCount = bigPicture.querySelector('.comments-shown-count');
 const socialCaption = bigPicture.querySelector('.social__caption');
 const likeCount = document.querySelector('.likes-count');
 
-const socialCommentCount = bigPicture.querySelector('.social__comment-count');
+// const socialCommentCount = bigPicture.querySelector('.social__comment-count');
 const socialComments = bigPicture.querySelector('.social__comments');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
 
-let commentsShowArray = [];
+let commentsShowList = [];
 
 const createPictureComments = (comments) => {
   comments.forEach((comment) => {
@@ -34,7 +35,10 @@ const createPictureComments = (comments) => {
 const renderComments = (comments) => {
   const showFirstComments = comments.slice(0, COMMENTS_AMOUNT);
   createPictureComments(showFirstComments);
-  socialCommentCount.textContent = `${showFirstComments.length} из ${comments.length} комментариев`;
+  // socialCommentCount.textContent = `${showFirstComments.length} из ${comments.length} комментариев`;
+  userShowCommentsCount.textContent = `${socialComments.children.length}`;
+  userCommentsCount.textContent = `${commentsShowList.length}`;
+
   if (showFirstComments.length >= comments.length) {
     commentsLoader.classList.add('hidden');
   } else {
@@ -54,14 +58,16 @@ const clearComments = () => {
 };
 
 const onCommentsLoaderClick = () => {
-  if (!commentsShowArray.length) {
+  if (!commentsShowList.length) {
     return;
   }
-  const addedComments = commentsShowArray.slice(socialComments.children.length, socialComments.children.length + COMMENTS_AMOUNT);
+  const addedComments = commentsShowList.slice(socialComments.children.length, socialComments.children.length + COMMENTS_AMOUNT);
   createPictureComments(addedComments);
-  socialCommentCount.textContent =
-    `${socialComments.children.length} из ${commentsShowArray.length} комментариев`;
-  if (commentsShowArray.length <= socialComments.children.length) {
+  userShowCommentsCount.textContent = `${socialComments.children.length}`;
+  userCommentsCount.textContent = `${commentsShowList.length}`;
+  // socialCommentCount.textContent =
+  //   `${socialComments.children.length} из ${commentsShowArray.length} комментариев`;
+  if (commentsShowList.length <= socialComments.children.length) {
     commentsLoader.classList.add('hidden');
   }
 };
@@ -74,7 +80,7 @@ const openModal = (picture) => {
   userCommentsCount.textContent = picture.comments.length;
   socialCaption.textContent = picture.description;
   clearComments();
-  commentsShowArray = picture.comments;
+  commentsShowList = picture.comments;
   renderComments(picture.comments);
   document.addEventListener('keydown', onDocumentKeydown);
   bigPicture.addEventListener('click', onPictureClose);

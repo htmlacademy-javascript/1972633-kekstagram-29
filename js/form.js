@@ -20,8 +20,8 @@ const slider = uploadForm.querySelector('.effect-level__slider');
 const effects = uploadForm.querySelector('.effects__list');
 const sliderContainer = uploadForm.querySelector('.img-upload__effect-level');
 const imagePreview = uploadForm.querySelector('.img-upload__preview img');
-// const effectLevel = uploadForm.querySelector('.effect-level__value');
 const uploadImg = document.querySelector('.img-upload__preview img');
+const uploadInput = document.querySelector('.img-upload__input');
 
 const textHashtags = uploadForm.querySelector('.text__hashtags');
 const textDescripton = uploadForm.querySelector('.text__description');
@@ -138,4 +138,6 @@ const openUploadOverlay = () => {
   effects.addEventListener('change', onEffectsChange);
 };
 
-export { openUploadOverlay, closeUploadOverlay, uploadScale, sliderContainer, slider, getSendForm, onDocumentKeydown };
+uploadInput.addEventListener('change', openUploadOverlay);
+
+export { closeUploadOverlay, uploadScale, sliderContainer, slider, getSendForm, onDocumentKeydown };
